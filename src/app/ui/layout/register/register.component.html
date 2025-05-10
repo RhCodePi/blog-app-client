@@ -1,19 +1,36 @@
 <div class="register-container">
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="usernameInput" placeholder="Username">
-      <label for="usernameInput">Username</label>
+  <form [formGroup]="frm" (ngSubmit)="onSubmit(frm.value)">
+    <div class="form-group mb-3">
+      <label for="username">Username</label>
+      <input 
+        type="text" formControlName="username" class="form-control" id="username" placeholder="Username" 
+        [ngClass]="{'is-invalid': submitted && component.username.errors}">
+      <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.username.errors?.required">The username field can't be empty</small>
+      <small class="form-text text-muted invalid-feedback" *ngIf="submitted && (component.username.errors?.maxlength || component.username.errors?.minlength)">
+        Username length must be between 3 and 50
+      </small>
     </div>
-    <div class="form-floating mb-3">
-      <input type="email" class="form-control" id="emailInput" placeholder="name@example.com">
-      <label for="emailInput">Email address</label>
+    <div class="form-group mb-3">
+      <label for="email">Email address</label>
+      <input
+       type="email" formControlName="email" class="form-control" id="email" placeholder="name@example.com"
+       [ngClass]="{'is-invalid': submitted && component.email.errors}">
+      <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.errors?.hasError('required')">The email field can't be empty</small>
+      <small class="form-text text-muted invalid-feedback" *ngIf="submitted && (component.email.errors?.email)">The email must be valid</small>
     </div>
-    <div class="form-floating mb-3">
-      <input type="password" class="form-control" id="passwordInput" placeholder="Password">
-      <label for="passwordInput">Password</label>
+    <div class="form-group mb-3">
+      <label for="password">Password</label>
+      <input type="password" formControlName="password" class="form-control" id="password" placeholder="Password"
+       [ngClass]="{'is-invalid': submitted && component.password.errors}">
+      <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.password.errors?.required">The password field can't be empty</small>
     </div>
-    <div class="form-floating mb-3">
-      <input type="password" class="form-control" id="passwordConfirmInput" placeholder="PasswordConfirm">
-      <label for="passwordConfirmInput">PasswordConfirm</label>
+    <div class="form-group mb-3">
+      <label for="passwordConfirm">PasswordConfirm</label>
+      <input type="password" formControlName="passwordConfirm" class="form-control" id="passwordConfirm" placeholder="PasswordConfirm" 
+      [ngClass]="{'is-invalid': submitted && component.passwordConfirm.errors}">
+      <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.passwordConfirm.errors?.required">The password confirm field can't be empty</small>
+      <small *ngIf="submitted && frm.hasError('notSame')">Please confirm your password.</small>
     </div>
     <button type="submit" class="btn btn-primary w-100">Register</button>
+  </form>
 </div>
