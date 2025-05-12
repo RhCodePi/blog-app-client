@@ -11,6 +11,11 @@ import {
 import { User } from '../../../entities/user';
 import { CreateUser } from '../../../contracts/users/create-user';
 import { CommonModule, NgClass } from '@angular/common';
+import {
+  CustomToastrService,
+  ToastrMessagePositon,
+  ToastrMessageType,
+} from '../../../services/common/custom-toastr.service';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +27,8 @@ import { CommonModule, NgClass } from '@angular/common';
 export class RegisterComponent implements OnInit {
   constructor(
     private userService: UserService,
-    private formBuilder: UntypedFormBuilder
+    private formBuilder: UntypedFormBuilder,
+    private toastr: CustomToastrService
   ) {}
 
   frm: UntypedFormGroup;
@@ -63,21 +69,20 @@ export class RegisterComponent implements OnInit {
   async onSubmit(user: User) {
     this.submitted = true;
 
-    this.component['email'].errors;
-
-    this.frm;
-
-    debugger;
     if (this.frm.invalid) return;
 
     const result: CreateUser = await this.userService.create(user);
 
+    if(result === undefined) return
+
     if (result.succeeded) {
-      console.log('User Created!');
-      console.log(result.message);
+      this.toastr.alert(result.message, 'Success', ToastrMessageType.SUCCESS, {
+        progressBar: true,
+      });
     } else {
-      console.log('Error!');
-      console.log(result.message);
+      this.toastr.alert(result.message, 'Error', ToastrMessageType.ERROR, {
+        position: ToastrMessagePositon.BOTTOM_RIGHT,
+      });
     }
   }
 }
