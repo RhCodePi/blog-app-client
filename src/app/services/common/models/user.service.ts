@@ -5,6 +5,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { CreateUser } from '../../../contracts/users/create-user';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CustomToastrService, ToastrMessagePositon, ToastrMessageType } from '../custom-toastr.service';
+import { LoginUser } from '../../../contracts/users/login-user';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,16 @@ export class UserService {
           position: ToastrMessagePositon.BOTTOM_RIGHT,
         })
       }) as CreateUser
+  }
+
+  async login(usernameOrEmail: string, password: string): Promise<LoginUser> { 
+    const observable = this.httpClientService.post<LoginUser | {usernameOrEmail: string, password: string}>({
+      controller: 'auths',
+    }, {
+      password: password,
+      usernameOrEmail: usernameOrEmail
+    })
+
+    return await firstValueFrom(observable) as LoginUser
   }
 }
