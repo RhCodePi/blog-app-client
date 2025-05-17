@@ -1,29 +1,49 @@
 import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { HttpClientService } from './http-client.service';
+import { LoginUser } from '../../contracts/users/login-user';
+import { firstValueFrom } from 'rxjs';
+import { Token } from '../../contracts/token/token';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  constructor(private httpClientService: HttpClientService) {}
 
-  constructor(private jwtHelper: JwtHelperService) { }
+  async login(usernameOrEmail: string, password: string): Promise<LoginUser> {
+    const observable = this.httpClientService.post<
+      LoginUser | { usernameOrEmail: string; password: string }
+    >(
+      {
+        controller: 'auths',
+      },
+      {
+        password: password,
+        usernameOrEmail: usernameOrEmail,
+      }
+    );
 
-  identityCheck(){
-    const token: string = localStorage.getItem("access_token");
+    return (await firstValueFrom(observable)) as LoginUser;
+  }
 
-    let expired: boolean;
-    try {
-      expired = this.jwtHelper.isTokenExpired(token) 
-    } catch (error) {
-      expired = true
+  async loginWithRefreshToken(
+    refreshToken: string,
+  ): Promise<any> {
+    const observable = this.httpClientService.post<Token | string>(
+      {
+        controller: 'auths',
+        action: 'loginwithrefreshtoken',
+      },
+      { refreshToken: refreshToken }
+    );
+
+    var response = (await firstValueFrom(observable)) as Token;
+
+    if (response) {
+      localStorage.setItem('access_token', response.accessToken),
+      localStorage.setItem('refresh_token', response.refreshToken);
     }
 
-    _isAuthenticated = token != null && !expired;
-  }
-
-  get isAuthenticated(): boolean {
-    return _isAuthenticated;
+    return response ? true : false;
   }
 }
-
-export let _isAuthenticated: boolean;
