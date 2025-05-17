@@ -5,6 +5,7 @@ import {
   ToastrMessagePositon,
   ToastrMessageType,
 } from '../../../services/common/custom-toastr.service';
+import { AuthHelperService } from '../../../services/helpers/auth-helper.service';
 import { AuthService } from '../../../services/common/auth.service';
 
 @Component({
@@ -16,9 +17,9 @@ import { AuthService } from '../../../services/common/auth.service';
 })
 export class LoginComponent {
   constructor(
-    private userService: UserService,
+    private authService: AuthService,
     private toastr: CustomToastrService,
-    private authService: AuthService
+    private authHelper: AuthHelperService
   ) {}
 
   async login() {
@@ -27,7 +28,7 @@ export class LoginComponent {
     ) as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
 
-    const result = await this.userService.login(
+    const result = await this.authService.login(
       usernameOrEmail.value,
       password.value
     );
@@ -40,7 +41,7 @@ export class LoginComponent {
         localStorage.setItem('refresh_token', result.token.refreshToken);
       }
 
-      this.authService.identityCheck();
+      this.authHelper.identityCheck();
 
       this.toastr.alert(result.message, 'Success', ToastrMessageType.SUCCESS, {
         progressBar: true,

@@ -27,14 +27,4 @@ export class UserService {
       }) as CreateUser
   }
 
-  async login(usernameOrEmail: string, password: string): Promise<LoginUser> { 
-    const observable = this.httpClientService.post<LoginUser | {usernameOrEmail: string, password: string}>({
-      controller: 'auths',
-    }, {
-      password: password,
-      usernameOrEmail: usernameOrEmail
-    })
-
-    return await firstValueFrom(observable) as LoginUser
-  }
 }

@@ -1,11 +1,11 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { AuthService } from '../../services/common/auth.service';
 import {
   CustomToastrService,
   ToastrMessageType,
 } from '../../services/common/custom-toastr.service';
 import { Router } from '@angular/router';
+import { AuthHelperService } from '../../services/helpers/auth-helper.service';
 
 @Component({
   selector: 'app-layout',
@@ -16,13 +16,13 @@ import { Router } from '@angular/router';
 })
 export class LayoutComponent {
   constructor(
-    public authService: AuthService,
+    public authHelper: AuthHelperService,
     private toastr: CustomToastrService,
     private router: Router
   ) {}
   signOut() {
     localStorage.removeItem('access_token');
-    this.authService.identityCheck();
+    this.authHelper.identityCheck();
     this.router.navigate(['']);
     this.toastr.alert(
       'sign out success',

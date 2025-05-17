@@ -7,13 +7,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a *ngIf="!authService.isAuthenticated" class="nav-link active" aria-current="page" href="/login">Login</a>
+            <a *ngIf="!authHelper.isAuthenticated" class="nav-link active" aria-current="page" href="/login">Login</a>
           </li>
           <li class="nav-item">
-            <a *ngIf="authService.isAuthenticated" class="nav-link active" aria-current="page" (click)="signOut()" href="/">Sign Out</a>
+            <a *ngIf="authHelper.isAuthenticated" class="nav-link active" aria-current="page" (click)="signOut()" href="/">Sign Out</a>
           </li>
           <li class="nav-item">
-            <a  *ngIf="!authService.isAuthenticated" class="nav-link" href="/register">Register</a>
+            <a  *ngIf="!authHelper.isAuthenticated" class="nav-link" href="/register">Register</a>
           </li>
         </ul>
       </div>
