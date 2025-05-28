@@ -13,6 +13,7 @@ import {
   ToastrMessageType,
 } from './custom-toastr.service';
 import { AuthService } from './auth.service';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,8 @@ import { AuthService } from './auth.service';
 export class HttpClientErrorInterceptorService implements HttpInterceptor {
   constructor(
     private toastr: CustomToastrService,
-    private authService: AuthService
+    private authService: AuthService,
+    private storageService: StorageService
   ) {}
   intercept(
     req: HttpRequest<any>,
@@ -32,7 +34,8 @@ export class HttpClientErrorInterceptorService implements HttpInterceptor {
           error.message,
           error.status,
           this.toastr,
-          this.authService
+          this.authService,
+          this.storageService
         );
         return of();
       })
@@ -43,7 +46,8 @@ function errorSelection(
   errorMessage: string,
   statusCode: number,
   toastr: CustomToastrService,
-  authService: AuthService
+  authService: AuthService,
+  storageService: StorageService
 ) {
   var errors = {
     [HttpStatusCode.BAD_REQUEST]: function () {
@@ -58,10 +62,9 @@ function errorSelection(
     },
     [HttpStatusCode.UNAUTHORIZED]: async function () {
       var result = await authService.loginWithRefreshToken(
-        localStorage.getItem('refresh_token')
+        storageService.getLocalStorage('refresh_token')
       );
-
-      if (result) {
+      if (!result) {
         toastr.alert(
           errorMessage + `\nStatus Code: ${statusCode}`,
           'Unauthorized',
