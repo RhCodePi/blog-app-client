@@ -8,6 +8,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientErrorInterceptorService } from './services/common/http-client-error-interceptor.service';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     ),
     {
       provide: HTTP_INTERCEPTORS, useClass: HttpClientErrorInterceptorService, multi: true
-    }
+    }, provideAnimationsAsync()
   ],
 };
 
