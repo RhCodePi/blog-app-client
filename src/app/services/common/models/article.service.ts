@@ -30,9 +30,22 @@ export class ArticleService {
       }
     );
 
-    debugger;
-
     return (await firstValueFrom(observable)) as Article[];
+  }
+
+  async createArticle(title: string, content: string): Promise<boolean> {
+
+    var observable = this.httpClient.post<boolean|any>({
+      controller:"articles",
+      action:"createarticle",
+      headers: this.addAuthToHeaders()
+    }, {
+      title,
+      content,
+      refreshToken: this.storageService.getLocalStorage(REFRESH_TOKEN)
+    });
+    
+    return await firstValueFrom(observable) as boolean
   }
 
   private addAuthToHeaders(): HttpHeaders {

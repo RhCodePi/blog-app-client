@@ -23,8 +23,6 @@ export class ArticleComponent implements OnInit {
     
   }
   onSubmit() {
-    // const formData = new FormData();
-    // formData.append('Title', this.form.value.title);
-    // formData.append('Content', this.form.value.content);
+
   }
 }
