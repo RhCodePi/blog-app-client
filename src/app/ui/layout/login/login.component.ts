@@ -7,6 +7,8 @@ import {
 } from '../../../services/common/custom-toastr.service';
 import { AuthHelperService } from '../../../services/helpers/auth-helper.service';
 import { AuthService } from '../../../services/common/auth.service';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,9 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private toastr: CustomToastrService,
-    private authHelper: AuthHelperService
+    private authHelper: AuthHelperService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   async login() {
@@ -42,6 +46,12 @@ export class LoginComponent {
       }
 
       this.authHelper.identityCheck();
+
+
+      var returnUrl: string|null = this.route.snapshot.queryParams['returnUrl']
+
+      if(returnUrl)
+        this.router.navigate([returnUrl]);
 
       this.toastr.alert(result.message, 'Success', ToastrMessageType.SUCCESS, {
         progressBar: true,

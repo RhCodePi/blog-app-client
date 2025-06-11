@@ -9,7 +9,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   authHelper.identityCheck();
 
   if (!authHelper.isAuthenticated) {
-    router.navigate(['login']);
+    router.navigate(['login'], {queryParams: {returnUrl: state.url}});
 
     return false;
   }
