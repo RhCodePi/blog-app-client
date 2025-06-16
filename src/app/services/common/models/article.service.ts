@@ -48,6 +48,20 @@ export class ArticleService {
     return await firstValueFrom(observable) as boolean
   }
 
+  async editArticle(articleId: string, title: string, content: string): Promise<Article>{
+    var observable = this.httpClient.post<Article| any>({
+      controller:"articles",
+      action: "editarticle",
+      headers: this.addAuthToHeaders()
+    }, {
+      articleId,
+      title,
+      content
+    })
+
+    return await firstValueFrom(observable) as Article
+  }
+
   private addAuthToHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json',
