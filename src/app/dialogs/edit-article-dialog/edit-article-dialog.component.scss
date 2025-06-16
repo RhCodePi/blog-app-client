@@ -1,0 +1,19 @@
+$form-gap: 20px;
+$button-gap: 10px;
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: $form-gap;
+  width: 100%;
+
+  .full-width {
+    width: 100%;
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: $button-gap;
+  }
+}
